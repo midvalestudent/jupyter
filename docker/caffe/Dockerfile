@@ -1,0 +1,68 @@
+FROM midvalestudent/jupyter/opencv:latest
+
+# caffe build prereqs
+RUN DEBIAN_FRONTEND=noninteractive \
+    && REPO=http://cdn-fastly.deb.debian.org \
+    && echo "deb $REPO/debian jessie main\ndeb $REPO/debian-security jessie/updates main" > /etc/apt/sources.list \
+    && apt-get update \
+    && apt-get install -y --no-install-recommends \
+        build-essential \
+        cmake \
+        git \
+        wget \
+        libatlas-base-dev \
+        libboost-all-dev \
+        libgflags-dev \
+        libgoogle-glog-dev \
+        libhdf5-serial-dev \
+        libleveldb-dev \
+        liblmdb-dev \
+        libprotobuf-dev \
+        libsnappy-dev \
+        protobuf-compiler \
+        python-dev \
+        python-numpy \
+        python-pip \
+        python-setuptools \
+        python-scipy \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
+
+# build caffe
+ENV CAFFE_ROOT=/opt/caffe
+ENV VERSION_TAG=rc5
+ENV HOME=/root/
+
+# get python prereqs
+RUN mkdir -p $CAFFE_ROOT && cd $CAFFE_ROOT \
+    && git clone -b ${VERSION_TAG} --depth 1 https://github.com/BVLC/caffe.git . \
+    && pip install --upgrade pip \
+    && cd python && for req in $(cat requirements.txt) pydot; do pip install $req; done 
+
+# configure
+ADD Makefile.config.$VERSION_TAG $CAFFE_ROOT/Makefile.config
+
+# build
+RUN cd $CAFFE_ROOT \
+    && echo "building on $(nproc) processors" \
+    && make -j"$(nproc)" all
+
+# install caffe
+ENV PYCAFFE_ROOT $CAFFE_ROOT/python
+ENV PYTHONPATH $PYCAFFE_ROOT:$PYTHONPATH
+ENV PATH $CAFFE_ROOT/build/tools:$PYCAFFE_ROOT:$PATH
+RUN echo "$CAFFE_ROOT/build/lib" >> /etc/ld.so.conf.d/caffe.conf && ldconfig
+
+# clean up build tools
+#   leave wget as it's handy for getting external data
+RUN apt-get purge -y --auto-remove \
+    build-essential \
+    cmake \
+    git \
+    protobuf-compiler
+
+# back to upriviliged user
+ENV HOME=/home/$NB_USER
+
+# add test code
+ADD test_caffe_mnist.sh /usr/local/bin/test_caffe_mnist.sh

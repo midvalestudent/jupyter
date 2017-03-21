@@ -1,0 +1,10 @@
+# default notebook location
+notebooks
+
+# editor
+*.sw[op]
+
+# python
+*.py[co]
+__pycache__
+*.ipynb
