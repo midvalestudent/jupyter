@@ -1,5 +1,8 @@
 FROM midvalestudent/jupyter-opencv:latest
 
+USER root
+ENV HOME=/root/
+
 # caffe build prereqs
 RUN DEBIAN_FRONTEND=noninteractive \
     && REPO=http://cdn-fastly.deb.debian.org \
@@ -31,7 +34,6 @@ RUN DEBIAN_FRONTEND=noninteractive \
 # build caffe
 ENV CAFFE_ROOT=/opt/caffe
 ENV VERSION_TAG=rc5
-ENV HOME=/root/
 
 # get python prereqs
 RUN mkdir -p $CAFFE_ROOT && cd $CAFFE_ROOT \
