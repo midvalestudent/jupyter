@@ -1,4 +1,4 @@
-FROM midvalestudent/jupyter/opencv:latest
+FROM midvalestudent/jupyter-opencv:latest
 
 # caffe build prereqs
 RUN DEBIAN_FRONTEND=noninteractive \
