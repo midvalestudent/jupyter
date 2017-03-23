@@ -35,11 +35,14 @@ RUN DEBIAN_FRONTEND=noninteractive \
 ENV CAFFE_ROOT=/opt/caffe
 ENV VERSION_TAG=rc5
 
-# get python prereqs
+# get caffe
 RUN mkdir -p $CAFFE_ROOT && cd $CAFFE_ROOT \
-    && git clone -b ${VERSION_TAG} --depth 1 https://github.com/BVLC/caffe.git . \
-    && pip install --upgrade pip \
-    && cd python && for req in $(cat requirements.txt) pydot; do pip install $req; done 
+    && git clone -b ${VERSION_TAG} --depth 1 https://github.com/BVLC/caffe.git .
+
+# get python requirements
+ADD requirements.txt /usr/local/share/requirements.txt
+RUN pip install --upgrade pip \
+    && pip install -r /usr/local/share/requirements.txt
 
 # configure
 ADD Makefile.config.$VERSION_TAG $CAFFE_ROOT/Makefile.config
