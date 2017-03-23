@@ -20,5 +20,5 @@ docker run \
     -v $(pwd):$(pwd) \
     -p $PORT:$PORT \
     -h $HOSTNAME \
-    midvalestudent/jupyter-$IMAGE_SHORTNAME:latest \
+    midvalestudent/jupyter/$IMAGE_SHORTNAME:latest \
     start-notebook.sh --ip=$HOSTNAME --port=$PORT
