@@ -34,6 +34,9 @@ RUN DEBIAN_FRONTEND=noninteractive \
 # build caffe
 ENV CAFFE_ROOT=/opt/caffe
 ENV VERSION_TAG=rc5
+ENV PYCAFFE_ROOT $CAFFE_ROOT/python
+ENV PYTHONPATH $PYCAFFE_ROOT:$PYTHONPATH
+ENV PATH $CAFFE_ROOT/build/tools:$PYCAFFE_ROOT:$PATH
 
 # get caffe
 RUN mkdir -p $CAFFE_ROOT && cd $CAFFE_ROOT \
@@ -47,16 +50,12 @@ RUN pip install --upgrade pip \
 # configure
 ADD Makefile.config.$VERSION_TAG $CAFFE_ROOT/Makefile.config
 
-# build
+# build and install
 RUN cd $CAFFE_ROOT \
     && echo "building on $(nproc) processors" \
-    && make -j"$(nproc)" all
-
-# install caffe
-ENV PYCAFFE_ROOT $CAFFE_ROOT/python
-ENV PYTHONPATH $PYCAFFE_ROOT:$PYTHONPATH
-ENV PATH $CAFFE_ROOT/build/tools:$PYCAFFE_ROOT:$PATH
-RUN echo "$CAFFE_ROOT/build/lib" >> /etc/ld.so.conf.d/caffe.conf && ldconfig
+    && make -j"$(nproc)" all \
+    && make -j"$(nproc)" pycaffe \
+    && echo "$CAFFE_ROOT/build/lib" >> /etc/ld.so.conf.d/caffe.conf && ldconfig
 
 # clean up build tools
 #   leave wget as it's handy for getting external data
