@@ -1,7 +1,7 @@
 FROM midvalestudent/jupyter-opencv:latest
 
 USER root
-ENV HOME=/root/
+ENV HOME=/root
 
 # Download/build/install ffmpeg
 ARG FFMPEG_VERSION
@@ -28,6 +28,7 @@ RUN DEBIAN_FRONTEND=noninteractive \
     && wget http://ffmpeg.org/releases/ffmpeg-$FFMPEG_VERSION.tar.gz \
     && tar xzf ffmpeg-$FFMPEG_VERSION.tar.gz && cd ffmpeg-$FFMPEG_VERSION \
     && ./configure \
+        --prefix=/usr/local \
         --enable-gpl \
         --enable-postproc \
         --enable-swscale \
@@ -41,9 +42,9 @@ RUN DEBIAN_FRONTEND=noninteractive \
         --enable-pthreads \
         --enable-libopenjpeg \
         --enable-nonfree \
-    && make -j4 install && ldconfig \
+    && make -j$(nproc) install && ldconfig \
     && cd /usr/src/build && rm -rf ffmpeg-$FFMPEG_VERSION* \
     && apt-get purge -y cmake && apt-get autoremove -y --purge
 
 # back to unprivilged user
-ENV HOME=/home/$NB_USER/
+ENV HOME=/home/$NB_USER

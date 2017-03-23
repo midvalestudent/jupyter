@@ -1,7 +1,7 @@
 FROM midvalestudent/jupyter-scipy:latest
 
 USER root
-ENV HOME=/root/
+ENV HOME=/root
 
 # Download/build/install components for opencv
 ARG OPENCV_VERSION
