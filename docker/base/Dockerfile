@@ -25,7 +25,7 @@ RUN wget --quiet https://github.com/krallin/tini/releases/download/v0.14.0/tini 
 
 # packages
 ADD requirements.txt /usr/local/share/requirements.txt
-RUN pip install -r /usr/local/share/requirements.txt
+RUN pip install --upgrade pip && pip install -r /usr/local/share/requirements.txt
 
 # create unprivileged user for running notebook
 ENV SHELL /bin/bash
@@ -47,10 +47,19 @@ RUN mkdir /home/$NB_USER/work && chmod g+s /home/$NB_USER/work && \
     echo "cacert=/etc/ssl/certs/ca-certificates.crt" > /home/$NB_USER/.curlrc && \
     umask 002
 
-# add configuration details
+# add unprivilged user configuration details
+ADD jupyter_notebook_config.py /$HOME/.jupyter/
+
 USER root
-ADD jupyter_notebook_config.py /home/$NB_USER/.jupyter/
 RUN chown -R $NB_USER:$NB_GROUP /home/$NB_USER/.jupyter && umask 002
+
+USER $NB_USER
+RUN jupyter nbextension enable --py widgetsnbextension
+
+# configure root user
+USER root
+ENV HOME /root
+ADD jupyter_notebook_config.py /$HOME/.jupyter/
 RUN jupyter nbextension enable --py widgetsnbextension --sys-prefix
 
 # install startup scripts

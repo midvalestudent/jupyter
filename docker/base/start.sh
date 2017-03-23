@@ -11,12 +11,12 @@ then
     then
         if [ "$NOTEBOOK_GID" != $(id -g $NB_USER) ]
         then
-            groupadd -g $NOTEBOOK_GID $NB_GROUP
+            groupadd -f -g $NOTEBOOK_GID $NB_GROUP
             usermod -u $NOTEBOOK_UID -g $NOTEBOOK_GID $NB_USER
         else
             usermod -u $NOTEBOOK_UID $NB_USER
         fi
-        chown $NB_USER:$NB_GROUP /home/$NB_USER/.jupyter/
+        chown $NB_USER:$NB_GROUP /$HOME/.jupyter/
     fi
 
     # Exec the command as NB_USER
