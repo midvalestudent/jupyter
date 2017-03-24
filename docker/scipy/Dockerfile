@@ -4,7 +4,7 @@ USER root
 ENV HOME=/root
 
 ADD requirements.txt /usr/local/share/requirements.txt
-RUN pip install -r /usr/local/share/requirements.txt
+RUN pip install --upgrade pip && pip install -r /usr/local/share/requirements.txt
 
 # Import matplotlib the first time to build the font cache
 RUN python -c "import matplotlib.pyplot"
