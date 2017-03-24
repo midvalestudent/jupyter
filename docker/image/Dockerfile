@@ -1,4 +1,4 @@
-FROM midvalestudent/jupyter/scipy:latest
+FROM midvalestudent/jupyter-scipy:latest
 
 USER root
 ENV HOME /root
