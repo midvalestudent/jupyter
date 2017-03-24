@@ -28,9 +28,24 @@ services:
       - $NOTEBOOK_DIR:$NOTEBOOK_DIR
       - $DATA_DIR:$DATA_DIR
 
+  opencv:
+    image: midvalestudent/jupyter/opencv:latest
+    build: ./opencv
+    command: start-notebook.sh --port=$NOTEBOOK_PORT
+    environment:
+      - NOTEBOOK_UID=$NOTEBOOK_UID
+      - NOTEBOOK_GID=$NOTEBOOK_GID
+    ports:
+      - "$NOTEBOOK_PORT:$NOTEBOOK_PORT"
+    working_dir: $NOTEBOOK_DIR
+    volumes:
+      - $NOTEBOOK_DIR:$NOTEBOOK_DIR
+      - $DATA_DIR:$DATA_DIR
+
+
   image:
     image: midvalestudent/jupyter/image:latest
-    build: ./opencv
+    build: ./image
     command: start-notebook.sh --port=$NOTEBOOK_PORT
     environment:
       - NOTEBOOK_UID=$NOTEBOOK_UID

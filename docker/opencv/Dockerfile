@@ -3,6 +3,9 @@ FROM midvalestudent/jupyter-scipy:latest
 USER root
 ENV HOME=/root
 
+ADD requirements.txt /usr/local/share/requirements.txt
+RUN pip install --upgrade pip && pip install -r /usr/local/share/requirements.txt
+
 # Download/build/install components for opencv
 ARG OPENCV_VERSION
 ENV OPENCV_VERSION ${OPENCV_VERSION:-"3.2.0"}
