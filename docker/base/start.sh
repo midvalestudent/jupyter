@@ -20,5 +20,5 @@ then
     exec su $NB_USER -c "env PATH=$PATH $*"
 else
     # Exec the command as a regular user
-    exec jupyter notebook $*
+    exec $*
 fi
