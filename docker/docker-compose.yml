@@ -28,8 +28,8 @@ services:
       - $NOTEBOOK_DIR:$NOTEBOOK_DIR
       - $DATA_DIR:$DATA_DIR
 
-  opencv:
-    image: midvalestudent/jupyter/opencv:latest
+  image:
+    image: midvalestudent/jupyter/image:latest
     build: ./opencv
     command: start-notebook.sh --port=$NOTEBOOK_PORT
     environment:
@@ -43,7 +43,7 @@ services:
       - $DATA_DIR:$DATA_DIR
 
   caffe:
-    image: midvalestudent/jupyter/caffe:rc5
+    image: midvalestudent/jupyter/caffe:latest
     build: ./caffe
     command: start-notebook.sh --port=$NOTEBOOK_PORT
     environment:
