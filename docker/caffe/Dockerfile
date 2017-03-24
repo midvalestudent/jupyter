@@ -1,7 +1,7 @@
 FROM midvalestudent/jupyter-opencv:latest
 
 USER root
-ENV HOME=/root/
+ENV HOME=/root
 
 # caffe build prereqs
 RUN DEBIAN_FRONTEND=noninteractive \
@@ -65,8 +65,8 @@ RUN apt-get purge -y --auto-remove \
     git \
     protobuf-compiler
 
-# back to upriviliged user
-ENV HOME=/home/$NB_USER
-
 # add test code
 ADD test_caffe_mnist.sh /usr/local/bin/test_caffe_mnist.sh
+
+# back to upriviliged user
+ENV HOME=/home/$NB_USER
