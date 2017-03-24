@@ -1,9 +1,10 @@
-# OpenCv 3.x container for running Jupyter
+# Image processing container for running Jupyter
 
 Dockerized container for running Jupyter, using pip for package management.
 
 This image is based on `midvalestudent/jupyter-scipy` and includes opencv
-version 3.x libraries.  Python 3 only.
+version 3.x and ffmpeg 3.2 libraries.  Pillow and scikits-image also included.
+Python 3 only.
 
 Example usage:
 
@@ -16,7 +17,7 @@ docker run \
     -v $(pwd):$(pwd) \
     -p $PORT:$PORT \
     -h $(hostname) \
-    midvalestudent/jupyter-opencv:latest \
+    midvalestudent/jupyter-image:latest \
     start-notebook.sh --ip=$(hostname) --port=$PORT
 ```
 
