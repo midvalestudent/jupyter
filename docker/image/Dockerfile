@@ -81,14 +81,16 @@ RUN DEBIAN_FRONTEND=noninteractive \
     && git clone -b $OPENCV_VERSION --depth 1 --recursive https://github.com/opencv/opencv.git \
     && git clone -b $OPENCV_VERSION --depth 1 --recursive https://github.com/opencv/opencv_contrib.git \
     && cd opencv && mkdir build && cd build \
-    && cmake -D CMAKE_BUILD_TYPE=RELEASE \
+    && cmake \
+        -D CMAKE_BUILD_TYPE=RELEASE \
         -D CMAKE_INSTALL_PREFIX=/usr/local \
         -D INSTALL_C_EXAMPLES=OFF \
         -D INSTALL_PYTHON_EXAMPLES=OFF \
         -D OPENCV_EXTRA_MODULES_PATH=/usr/src/build/opencv_contrib/modules \
-        -D BUILD_EXAMPLES=OFF .. \
+        -D BUILD_EXAMPLES=OFF \
         -D FFMPEG_INCLUDE_DIR=/usr/local/include \
         -D FFMPEG_LIB_DIR=/usr/local/lib \
+        .. \
     && make -j4 install && ldconfig \
     && cd /usr/src/build && rm -rf opencv && rm -rf opencv_contrib \
     && apt-get purge -y cmake && apt-get autoremove -y --purge
