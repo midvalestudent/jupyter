@@ -36,31 +36,19 @@ ENV LC_ALL en_US.UTF-8
 ENV LANG en_US.UTF-8
 ENV LANGUAGE en_US.UTF-8
 
-RUN groupadd $NB_GROUP \
-    && useradd -m -s $SHELL -g $NB_GROUP $NB_USER
+RUN groupadd $NB_GROUP && useradd -m -s $SHELL -g $NB_GROUP $NB_USER
 
 # set up the unpriviliged user's environment
 USER $NB_USER
-RUN mkdir /home/$NB_USER/work && chmod g+s /home/$NB_USER/work && \
-    mkdir /home/$NB_USER/.jupyter && \
-    mkdir -p -m 700 /home/$NB_USER/.local/share/jupyter && \
-    echo "cacert=/etc/ssl/certs/ca-certificates.crt" > /home/$NB_USER/.curlrc && \
-    umask 002
+RUN mkdir /home/$NB_USER/.jupyter \
+    && mkdir -p -m 755 /home/$NB_USER/.local/share/jupyter \
+    && echo "cacert=/etc/ssl/certs/ca-certificates.crt" > /home/$NB_USER/.curlrc \
+    && umask 002
+ADD jupyter_notebook_config.py /home/$NB_USER/.jupyter/
 
-# add unprivilged user configuration details
-ADD jupyter_notebook_config.py /$HOME/.jupyter/
-
-USER root
-RUN chown -R $NB_USER:$NB_GROUP /home/$NB_USER/.jupyter && umask 002
-
-USER $NB_USER
-RUN jupyter nbextension enable --py widgetsnbextension
-
-# configure root user
+# back to root
 USER root
 ENV HOME /root
-ADD jupyter_notebook_config.py /$HOME/.jupyter/
-RUN jupyter nbextension enable --py widgetsnbextension --sys-prefix
 
 # install startup scripts
 ADD start.sh /usr/local/bin/start.sh
