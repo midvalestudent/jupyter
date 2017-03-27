@@ -54,7 +54,7 @@ ADD Makefile.config.$VERSION_TAG $CAFFE_ROOT/Makefile.config
 RUN cd $CAFFE_ROOT \
     && echo "building on $(nproc) processors" \
     && make -j"$(nproc)" all \
-    && WITH_PYTHON_LAYER=1 make -j"$(nproc)" pycaffe \
+    && make -j"$(nproc)" pycaffe \
     && echo "$CAFFE_ROOT/build/lib" >> /etc/ld.so.conf.d/caffe.conf && ldconfig
 
 # clean up build tools
