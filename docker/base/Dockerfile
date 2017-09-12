@@ -27,6 +27,10 @@ RUN wget --quiet https://github.com/krallin/tini/releases/download/v0.14.0/tini 
 ADD requirements.txt /usr/local/share/requirements.txt
 RUN pip install --upgrade pip && pip install -r /usr/local/share/requirements.txt
 
+# notebook extensions
+RUN jupyter contrib nbextension install
+RUN jupyter nbextensions_configurator enable
+
 # create unprivileged user for running notebook
 ENV SHELL /bin/bash
 ENV NB_USER jovyan

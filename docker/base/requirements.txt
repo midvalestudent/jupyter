@@ -1,2 +1,4 @@
-notebook==4.4
-widgetsnbextension>=2.0
+notebook>=5.0.0
+widgetsnbextension>=3.0.2
+ipywidgets>=7.0.0
+jupyter_contrib_nbextensions>=0.3.1

@@ -20,5 +20,6 @@ then
     exec su $NB_USER -c "env PATH=$PATH $*"
 else
     # Exec the command as a regular user
+    echo "WARNING: running as regular user; permissions may not be correct"
     exec $*
 fi
