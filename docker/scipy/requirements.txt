@@ -1,8 +1,8 @@
-pandas==0.18.*
-matplotlib==1.5.*
-numpy==1.11.*
-scipy==0.18.*
-seaborn==0.7.*
-scikit-learn==0.17.*
-cython==0.23.*
-statsmodels==0.6.*
+pandas>=0.20
+matplotlib>=2.0
+numpy>=1.13
+scipy>=0.19
+seaborn>=0.8
+scikit-learn>=0.19
+cython>=0.26
+statsmodels>=0.8
